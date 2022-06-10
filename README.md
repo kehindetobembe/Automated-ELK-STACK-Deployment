@@ -29,10 +29,10 @@ Integrating an ELK server allows users to easily monitor the vulnerable VMs for 
 The configuration details of each machine may be found below.
 | Name       | Function                   | IP Address | Operating System         |
 |------------|----------------------------|------------|--------------------------|
-| Jump Box   | Gateway                    | 10.1.0.7   | Linux (Ubuntu 18.04 LTS) |
+| Jump Box   | Gateway                    | 10.1.0.4   | Linux (Ubuntu 18.04 LTS) |
 | Web-1      | Web Server - Docker - DVWA | 10.1.0.5   | Linux (Ubuntu 18.04 LTS) |
 | Web-2      | Web Server - Docker - DVWA | 10.1.0.6   | Linux (Ubuntu 18.04 LTS) |
-| ELK-Server | ELK Stack                  | 10.0.0.4   | Linux (Ubuntu 18.04 LTS) |
+| ELK-Server | ELK Stack                  | 10.5.0.4   | Linux (Ubuntu 18.04 LTS) |
 ### Access Policies
 The machines on the internal network are not exposed to the public Internet.
 Only the Jump Box Provisioner machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
@@ -43,9 +43,9 @@ A summary of the access policies in place can be found in the table below.
 | Name       | Publicly Accessible     | Allowed IP Address                                 |
 |------------|-------------------------|----------------------------------------------------|
 | Jump-Box   | No                      | Personal IP Address                                |
-| Web-1      | Yes Thru Load Ballancer | 13.66.204.159 LB Public IP 10.0.0.4 - JumpBox      |
-| Web-2      | Yes Thru Load Ballancer | 13.66.204.159 LB Public IP 10.0.0.4 JumpBox        |
-| ELK-Server | No                      | SSH 10.0.0.4 - JumpBox HTTP Port 5601 Personal IP  |
+| Web-1      | Yes Thru Load Ballancer | 20.211.175.105 LB Public IP 10.1.0.4 - JumpBox     |
+| Web-2      | Yes Thru Load Ballancer | 20.211.175.105 LB Public IP 10.1.0.4 JumpBox       |
+| ELK-Server | No                      | SSH 10.5.0.4 - JumpBox HTTP Port 5601 Personal IP  |
 ### Elk Configuration
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because...
 - The main advantage of automating the installation process is that we could deploy multiple servers easily and quickly without having to
@@ -59,14 +59,13 @@ The following screenshot displays the result of running `docker ps` after succes
 ![docker-ps](Images/docker-ps.png)
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
-* Web-1 10.1.5
-* Web-2 10.1.6
+* Web-1 10.1.0.5
+* Web-2 10.1.0.6
 We have installed the following Beats on these machines:
 * Filebeat
 * Metricbeat
 
 These Beats allow us to collect the following information from each machine:
-- _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
 * Filebeat watches for log files/locations and collect log events. (Filebeat: Lightweight Log Analysis &amp; Elasticsearch)
 * Metricbeat records metrics and statistical data from the operating system and from services running on the server (Metricbeat: Lightweight Shipper for Metrics)
 
@@ -77,10 +76,6 @@ SSH into the control node and follow the steps below:
 - Update the configuration files to include the Private IP of the ELK-Server to the ElasticSearch and Kibana Sections of the Configuration File
 - Run the playbook, and navigate to ELK-Server-PublicIP:5601/app/kibana to check that the installation worked as expected.
 
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
 Which file is the playbook?
 The playbook files are:
 * [elk-playbook.yml](YML-Playbooks/elk-playbook.yml) - used to install ELK Server
@@ -104,7 +99,7 @@ Which URL do you navigate to in order to check that the ELK server is running?
 http://publicip(elkserver):5601
 
 ### Commands needed to run the Anisble Configuration for the Elk-Server are:
-1. ssh RedAdmin@JumpBox(PrivateIP)
+1. ssh azadmin@JumpBox(PrivateIP)
 2. sudo docker container list -a - Locate the ansible container
 3. sudo docker start <name of container>(Funny_Name)
 4. sudo docker attach <name of container>(Funny_Name)
@@ -113,7 +108,3 @@ http://publicip(elkserver):5601
 7. cd /etc/ansible/
 8. ansible-playbook beats-playbook.yml (Installs and Configures Beats)
 9. Open a new browser on Personal Workstation, navigate to (ELK-Server-PublicIP:5601/app/kibana) - This will bring up Kibana Web Portal
-### References
-Filebeat: Lightweight Log Analysis &amp; Elasticsearch. (n.d.). Retrieved August 22, 2020, from https://www.elastic.co/beats/filebeat
-Metricbeat: Lightweight Shipper for Metrics. (n.d.). Retrieved August 22, 2020, from https://www.elastic.co/beats/metricbeat
-
